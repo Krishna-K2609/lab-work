@@ -1,1 +1,3 @@
-This repository is for activities related to EEB234
+The goal of this exercise is to learn about version control.
+
+My favorite country is Bhutan - love the mountains!
