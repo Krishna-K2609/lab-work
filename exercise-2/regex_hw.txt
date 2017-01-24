@@ -4,19 +4,15 @@ As species of the same genus have usually, though by no means invariably, some s
 
 1.  Write a regular expression that will find all of the words beginning with the letter `s`. Your regular expression should capture the whole word- not just the beginning `s`!  
 ANSWER:\ss\w+\s 
-The regular expression will find all the the words that are between spaces and that start with the letter 's'.
 
 2.  Write a regular expression that will find the last word of every sentence. Your regular expression should capture the whole last word - not just the first or last letter! (Hint: note that not all sentences end with a period- one ends in an `!`)   
 ANSWER:\s\w+(\.|\!)
-The regular expression will find all words after a space and that are directly followed by an exclamation mark or a period.
 
 3.  Write a regular expression that will find the first word of every sentence. Your regular expression should match the whole first word- not just the first letter!    
 ANSWER:(?:^|(?:(\.|\!)\s))(\w+)
-The regular expression finds the first word of every paragraph as well as the words directly followed by a period and space character or an exclamation mark and space character.
 
 4.  Write a regular expression that will match the **sentence** containing the phrase "Asiatic cockroach".  
 ANSWER:\!\s\b[A-Z].*?Asiatic\scockroach.*?\b\.
-The regular expression will match the text directly after the exclamation mark and a space character and that contains the words "Asiatic cockroach" until the next period. 
 
 Now consider the following comma-delimited rows of data (this is a small number of rows from some of Gaurav's research, with the actual species codes and seed counts changed...):  
 
