@@ -1,0 +1,14 @@
+---
+title: "In class exercise 8"
+author: "Krishna Krishnamurthy"
+date: "March 1, 2017"
+output: html_document
+---
+
+## Reading in data files
+
+```{r}
+read.table("/home/eeb177-student/Desktop/eeb177/class-assignments/classwork-Tuesday-2-21/cocoli.txt"
+, header = TRUE)
+## adding header=TRUE to add first row as header row
+```
