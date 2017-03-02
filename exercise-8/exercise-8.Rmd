@@ -8,7 +8,78 @@ output: html_document
 ## Reading in data files
 
 ```{r}
-read.table("/home/eeb177-student/Desktop/eeb177/class-assignments/classwork-Tuesday-2-21/cocoli.txt"
+cocoli_dat <- read.table("/home/eeb177-student/Desktop/eeb177/class-assignments/classwork-Tuesday-2-21/cocoli.txt"
 , header = TRUE)
 ## adding header=TRUE to add first row as header row
 ```
+
+```{r}
+sizes_in_94 <- cocoli_dat$dbh1
+# extract only dbh1 column
+names(sizes_in_94) <- cocoli_dat$tag
+# link tag to sizes_in_94
+sizes_in_94[1:10] 
+# in python, the first element is 0; in R it's 1
+sizes_in_94["000009"]
+# we can also refer to a specific vector
+sizes_in_94[c("000009", "000099")]
+# we can also look for multiple vectors using c
+```
+```{r}
+# calculate relative growth rate
+sizes_in_94 <- cocoli_dat$dbh1
+names(sizes_in_94) <- cocoli_dat$tag
+sizes_in_97 <- cocoli_dat$dbh2
+rgr_1 <- ((sizes_in_97 - sizes_in_94)/(sizes_in_94))/3
+# yearly growth rate
+rgr_1
+
+cocoli_dat$rgr1 <- rgr_1
+# adding relative growth rate to cocoli_dat
+
+cocoli_dat
+# double-checking that RGR is included
+```
+
+## Plotting data
+We use ggplot2 (gg = grammar of graphics)
+
+```{r}
+# Bar graph; use barplot()
+# Box plot; use boxplot()
+# Scatterplot; use plot()
+# Histogram; use hist()
+
+hist(sizes_in_94, xlab = "DBH (mm)", main = "Dsitribution of tree sizes in Cocoli (1994)")
+
+plot(x = sizes_in_94, y = sizes_in_97, main = "Scatterplot of sizes", xlab = "DBH in 1994 (mm)", ylab = "DBH in 1997 (mm)", pch = 19, col = "darkgreen", log = "xy")
+# pch argument changes the plot, col changes colors
+
+# basic plots are not very pretty; need a lot of effort to make plots nicer manually
+```
+
+** Remove negative values
+
+```{r}
+library(dplyr)
+
+# %>% is the same as | in the terminal
+cocoli_dat %>% filter(dbh1 > 0) %>% select(dbh1)
+# we take the whole dataset, and then filter out all rows where dbh1 > 0
+# take cocoli_dat, then filter instances where dbh1 > 0, then show only dbh1
+# select is like cut
+
+cocoli_dat %>% filter(dbh1 > 0) %>% arrange(dbh1)
+# arrange arranges values in ascending order
+
+cocoli_dat %>% filter(dbh1 > 0) %>% arrange(-dbh1)
+# - is used to show values in descending order
+
+cocoli_dat %>% filter(dbh1 > 0) %>% group_by(spcode) %>% summarise(mean_dbh_1994 = mean(dbh1))
+# average dbh of each tree species in 1994
+
+cocoli_dat %>% filter(dbh1 > 0) %>% group_by(spcode) %>% summarise(mean_dbh_1994 = mean(dbh1)) %>% arrange(-mean_dbh_1994)
+
+cocoli_dat %>% filter(dbh1 > 0) %>% group_by(spcode) %>% summarize(area_dbh_1994 = sum((dbh1/2)^2*pi)) %>% arrange(-area_dbh_1994)
+```
+
