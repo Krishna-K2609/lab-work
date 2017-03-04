@@ -158,5 +158,59 @@ rbind(head(housing.sum), tail(housing.sum))
 ggplot(housing.sum, aes(x=State, y=Home.Value)) + geom_bar(stat="identity")
 ```
 
+## Exercise 2
+
+```{r}
+# Q1. Re-create scatterplot with x=CPI and y=HDI
+# read-in the data
+dat <- read.csv("/home/eeb177-student/Desktop/eeb177/lab-work/exercise-8/Rgraphics/dataSets/EconomistData.csv")
+head(dat)
+
+ggplot(dat, aes(x = CPI, y = HDI))+ geom_point()
+
+# Q2. Overlay smoothing line with geom_smooth
+ggplot(dat, aes(x = CPI, y = HDI))+ geom_point() + geom_smooth()
+
+#Q3. Overlay a smoothing line but using linear model for predictions
+ggplot(dat, aes(x = CPI, y = HDI))+ geom_point() + geom_smooth(method="lm")
+
+#Q4. Overlay a smoothing line using geom_line
+ggplot(dat, aes(x = CPI, y = HDI))+ geom_point() + geom_line(stat="identity")
+
+#Q5. OVeraly a smoothing line using the loess method, but making it less smooth
+ggplot(dat, aes(x = CPI, y = HDI))+ geom_point() + loess.smooth(x = dat$CPI, y = dat$HDI, span=2/5, degree=2)
+# hmm, doesn't work
+```
+
+## Scales
+
+```{r}
+p3 <- ggplot(housing, aes(x = State, y = Home.Price.Index)) + theme (legend.position = "top", axis.text = element_text(size=6))
+(p4 <- p3 + geom_point(aes(color = Date), alpha = 0.5, size = 1.5, position = position_jitter(width = 0.25, height = 0)))
+# the chart shows a dotplot of the distribution of home values by date and state
+
+# now we modify the breaks for the x axis and color scales
+p4 + scale_x_discrete(name="State Abbreviation") + scale_color_continuous(name="", breaks = c(1976,1994,2013), labels = c("'76", "'94", "'13"))
+
+# now we modify the low and high ends of the color scale
+p4 + scale_x_discrete(name="State Abbreviation") + scale_color_continuous(name="", breaks = c(1976,1994,2013), labels = c("'76", "'94", "'13"), low = "blue", high = "red")
+
+# muted is optional but makes the colors less 'in-your-face'
+p4 + scale_x_discrete(name="State Abbreviation") + scale_color_continuous(name="", breaks = c(1976,1994,2013), labels = c("'76", "'94", "'13"), low="#83adb5", high="#771F1F")
+# apparently this doesn't work because muted has migrated to a new scales package. need to update ez so I am using hexcodes instead
+
+# adding a midpoint and color
+p4 +
+  scale_color_gradient2(name="",
+                        breaks = c(1976, 1994, 2013),
+                        labels = c("'76", "'94", "'13"),
+                        low = "blue",
+                        high = "red",
+                        mid = "gray60",
+                        midpoint = 1994)
+```
+
+## Exercise 3
+
 
 
