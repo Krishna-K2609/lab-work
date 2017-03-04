@@ -1,0 +1,162 @@
+---
+title: "exercise-8-hw"
+author: "Krishna Krishnamurthy"
+date: "March 1, 2017"
+output: md_document
+---
+
+```{r}
+library(ggplot2)
+
+# reading in housing data
+housing <- read.csv("Rgraphics/dataSets/landdata-states.csv")
+head(housing[1:5])
+# showing the first 5 columns
+```
+
+## Comapring base and `ggplot2`
+### Histograms
+
+```{r}
+
+
+# compare base vs ggplot2
+hist(housing$Home.Value)
+# not a very inspiring chart
+
+library(ggplot2)
+ggplot(housing, aes(x = Home.Value)) + geom_histogram()
+# more verbose but prettier chart
+# syntax is ggplot(file, values to be displayed, type of chart)
+# aes refers to aesthetics which are defined by the user
+```
+
+### Line charts
+
+```{r}
+# Base example
+plot(Home.Value ~ Date,
+     data=subset(housing, State == "MA"))
+# no information on color added
+points(Home.Value ~ Date, col="red",
+       data=subset(housing, State == "TX"))
+# here we use points() to add a second data layer
+legend(1975, 400000,
+       c("MA", "TX"), title="State",
+       col=c("black", "red"),
+       pch=c(1, 1))
+
+
+## ggplot2
+ggplot(subset(housing, State %in% c("MA", "TX")),
+       aes(x=Date,
+           y=Home.Value,
+           color=State))+
+  geom_point()
+
+# much simpler code. ggplot2 seems to be simpler when dealing with multiple points. The output is also much prettier! geom_ changes the type of plot. We can use geom_line for example; this provides a cleaner chart.
+
+ggplot(subset(housing, State %in% c("MA", "TX")),
+       aes(x=Date,
+           y=Home.Value,
+           color=State))+
+  geom_line()
+
+# We add a geom to a plot using the + operator 
+```
+
+### Scatterplot
+```{r}
+hp2001Q1 <- subset(housing, Date == 2001.25) 
+# defining hp2001Q1 as house prices for Q1 of 2001 which is recorded as 2001.25 in the dataset
+ggplot(hp2001Q1,
+       aes(y = Structure.Cost, x = Land.Value)) +
+  geom_point()
+
+ggplot(hp2001Q1,
+       aes(y = Structure.Cost, x = log(Land.Value))) +
+  geom_point()
+# using log transformation for land value
+
+# adding another dimension and a prediction line
+hp2001Q1$pred.SC <- predict(lm(Structure.Cost ~ log(Land.Value), data = hp2001Q1))
+# adding prediction data
+p1 <- ggplot(hp2001Q1, aes(x = log(Land.Value), y = Structure.Cost))
+# assigning land value and structure cost data to p1
+p1 + geom_point(aes(color = Home.Value)) +
+  geom_line(aes(y = pred.SC))
+# adding home value data to points; adding legend and creating chart
+# can use xlab and ylab to change labels
+
+# adding a line and ribbon
+p1 +
+  geom_point(aes(color = Home.Value)) +
+  geom_smooth()
+```
+
+### Labeling points
+
+```{r}
+p1 + 
+  geom_text(aes(label=State), size = 3)
+# p1 was defined in the previous chunk of code. this does not include the points, just the labels
+
+library("ggrepel")
+p1 + 
+  geom_point() + 
+  geom_text_repel(aes(label=State), size = 3)
+# this code adds points to the chart so we don't just see floating text
+
+# We can add other dimensions (such as regional information)
+p1 +
+  geom_point(aes(color=Home.Value, shape = region))
+# here, each point is displayed with a shape that refers to the region
+```
+
+## Exercise 1
+
+```{r}
+dat <- read.csv("/home/eeb177-student/Desktop/eeb177/lab-work/exercise-8/Rgraphics/dataSets/EconomistData.csv")
+head(dat)
+# reading in data
+
+ggplot(dat, aes(x = CPI, y = HDI, size = HDI.Rank)) + geom_point()
+# chart showing CPI on x acis and HDI on y axis. Points are sized according to HDI rank.
+
+# 1. Create a scatterplot with CPI on x axis and HDI in y axis
+ggplot(dat, aes(x = CPI, y = HDI)) + geom_point()
+
+# 2. Color the points blue
+ggplot(dat, aes(x = CPI, y = HDI), color="blue") + geom_point()
+
+
+ggplot(dat, aes(x = CPI, y = HDI, size = HDI.Rank, color=Region)) + geom_point()
+```
+## Statistical transformations
+
+Some plots like histograms require statistical transformations. We use geom for these plots.
+
+```{r}
+p2 <- ggplot(housing, aes(x=Home.Value))
+p2 + geom_histogram()
+# This suggests changing bins value. We can fix that with the following code
+
+p2 + geom_histogram(stat = "bin", binwidth =4000)
+# cleaner chart
+```
+
+Sometimes the default is not good enough for what we need.
+
+```{r}
+housing.sum <- aggregate(housing["Home.Value"], housing["State"], FUN=mean)
+rbind(head(housing.sum), tail(housing.sum))
+# here we are summarizing data, so default transformations may not be adequate
+
+# ggplot(housing.sum, aes(x=State, y=Home.Value)) + geom_bar()
+# this doesn't work because we are taking summarized data and asking R to summarize it again. Hence, we get an error message We need another transormation
+
+ggplot(housing.sum, aes(x=State, y=Home.Value)) + geom_bar(stat="identity")
+```
+
+
+
