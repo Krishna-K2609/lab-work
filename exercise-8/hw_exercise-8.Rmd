@@ -212,5 +212,18 @@ p4 +
 
 ## Exercise 3
 
+```{r}
+# Create scatterplot with x=CPI and y=HDI and colors to indicate the region
+# read-in the data
+dat <- read.csv("/home/eeb177-student/Desktop/eeb177/lab-work/exercise-8/Rgraphics/dataSets/EconomistData.csv")
+
+economist1 <- (ggplot(dat, aes(x = CPI, y = HDI, color=Region)) + geom_point())
+# changing the x-axis and y-axis labels; removing label from colorscale
+economist2 <- (economist1 + scale_x_continuous(name="Corruption Perception Index") + scale_y_continuous(name="Human Development Index") + scale_color_discrete(name=""))
+
+# modifying color scale to use specific values of my choosing
+cols <- c("Americas" = "#98AFC7", "Asia Pacific" = "#95B9C7", "East EU Cemt Asia" = "#45FBC7", "EU W. Europe" = "#25383C", "MENA" = "#C24641", "SSA" = "#8A4117")
+economist1 + scale_colour_manual(values = cols) + scale_x_continuous(name="Corruption Perception Index") + scale_y_continuous("Human Development Index")
+```
 
 
