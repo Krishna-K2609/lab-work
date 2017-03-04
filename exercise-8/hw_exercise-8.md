@@ -317,7 +317,112 @@ Exercise 3
     economist2 <- (economist1 + scale_x_continuous(name="Corruption Perception Index") + scale_y_continuous(name="Human Development Index") + scale_color_discrete(name=""))
 
     # modifying color scale to use specific values of my choosing
-    cols <- c("Americas" = "#98AFC7", "Asia Pacific" = "#95B9C7", "East EU Cemt Asia" = "#45FBC7", "EU W. Europe" = "#25383C", "MENA" = "#C24641", "SSA" = "#8A4117")
-    economist1 + scale_colour_manual(values = cols) + scale_x_continuous(name="Corruption Perception Index") + scale_y_continuous("Human Development Index")
+    ggplot(dat, aes(x = CPI, y = HDI, color=Region)) + geom_point() + scale_color_manual(labels = c("Americas", "Asia-Pacific", "Eastern and Central Europe", "Western Europe", "Middle East and North Africa", "Sub-Saharan Africa"), values = c("#98AFC7", "#95B9C7", "#45FBC7", "#25383C", "#C24641", "#8A4117")) + scale_x_continuous(name="Corruption Perception Index") + scale_y_continuous("Human Development Index")
 
 ![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+
+Faceting
+--------
+
+    p5 <- ggplot(housing, aes(x = Date, y = Home.Value))
+    p5 + geom_line(aes(color = State))
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-12-1.png)
+
+    # too many lines
+
+    (p5 <- p5 + geom_line() + facet_wrap(~State, ncol=10))
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-12-2.png)
+
+    # faceting makes this cleaner by creating one line chart per ~State and 10 charts per row (ncol = 10)
+
+Themes
+------
+
+    p5 + theme_linedraw()
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+
+    # cool theme!
+
+    p5 + theme_light()
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-13-2.png)
+
+    # a different theme, lighter colors
+
+    # we can also override theme defaults
+    p5 + theme_minimal() + theme(text = element_text(color = "sienna"))
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-13-3.png)
+
+    # and we an create new themes!
+    theme_new <- theme_bw() +
+      theme(plot.background = element_rect(size = 1, color = "blue", fill = "black"),
+            text=element_text(size = 12, family = "Serif", color = "ivory"),
+            axis.text.y = element_text(colour = "purple"),
+            axis.text.x = element_text(colour = "red"),
+            panel.background = element_rect(fill = "pink"),
+            strip.background = element_rect(fill = "orange"))
+
+    p5 + theme_new
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-13-4.png)
+
+    # not very pretty... but demonstrates what can be done
+
+FAQs
+----
+
+    # The best way to plot a chart with two variables is to use tidyr
+    library(tidyr)
+    # define housing.byyear
+    housing.byyear <-aggregate(cbind(Home.Value, Land.Value) ~ Date, data = housing, mean)
+    ggplot(housing.byyear,
+           aes(x=Date)) +
+      geom_line(aes(y=Home.Value), color="red") +
+      geom_line(aes(y=Land.Value), color="blue")
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+
+    # now we use tidyr's capacities
+    home.land.byyear <- gather(housing.byyear,
+                               value = "value",
+                               key = "type",
+                               Home.Value, Land.Value)
+    ggplot(home.land.byyear,
+           aes(x=Date,
+               y=value,
+               color=type)) +
+      geom_line()
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-14-2.png)
+
+Re-creating the Economist chart
+-------------------------------
+
+    # reading in data
+    dat <- read.csv("/home/eeb177-student/Desktop/eeb177/lab-work/exercise-8/Rgraphics/dataSets/EconomistData.csv")
+
+    econ <- ggplot(dat, aes(x = CPI, y = HDI)) + geom_point(aes(color=Region), shape=1) + geom_smooth(data=dat, method="lm", formula = y ~ splines::bs(x,3), se = FALSE, color="red")
+    # scatterplot with CPI on x axis and HDI on y axis, and colors representing regions. hollow circles. 
+
+    econ1 <- econ + scale_color_manual(name = " ", labels = c("Americas", "Asia-Pacific", "Eastern and Central Europe", "Western Europe", "Middle East and North Africa", "Sub-Saharan Africa"), values = c("#98AFC7", "#95B9C7", "#45FBC7", "#25383C", "#C24641", "#8A4117")) + scale_x_continuous(name="Corruption Perception Index, 2011 (10=least corrupt)", limits = range(1:10), breaks=pretty(dat$CPI, n=10)) + scale_y_continuous(name="Human Development Index (1=best)", limits = range(0.0:1.0),breaks=pretty(dat$HDI, n=5))
+    #changing axes descriptions and legend labels
+
+    econ2 <- (econ1 + ggtitle("Corruption and human development") + theme(plot.title = element_text(face="bold", size=16)))
+    # adding title
+
+    econ3 <- (econ2 + theme(legend.position = "top"))
+    # moving legend to top of chart
+
+    econ4 <- (econ3 + theme(axis.title.y=element_text(face="italic", size=6)) + theme(axis.title.x=element_text(face="italic", size=6)))
+    # making axes labels smaller and italic
+
+    econ4
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-15-1.png)
+
+    #ggplot(dat, aes(x = CPI, y = HDI, color = Region)) + theme(legend.position = "top") + scale_color_manual(labels = c("Americas", "Asia-Pacific", "Eastern and Central Europe", "Western Europe", "Middle East and North Africa", "Sub-Saharan Africa"), values = c("#98AFC7", "#95B9C7", "#45FBC7", "#25383C", "#C24641", "#8A4117") + geom_point(shape=1)) + ggtitle("Corruption and human development") + theme(plot.title = element_text(face="bold", size=16)) + scale_x_continuous(name="Corruption Perception Index, 2011 (10=least corrupt)", limits = range(1:10), breaks=pretty(dat$CPI, n=10)) + scale_y_continuous(name="Human Development Index (1=best)", limits = range(0.0:1.0),breaks=pretty(dat$HDI, n=5)) + scale_color_discrete(name="") + theme(axis.title.y=element_text(face="italic", size=6)) + theme(axis.title.x=element_text(face="italic", size=6)))
+    #this stopped working so I decided to break the code into smaller, more digetible chunks.
