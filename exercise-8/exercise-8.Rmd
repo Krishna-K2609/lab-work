@@ -2,7 +2,7 @@
 title: "In class exercise 8"
 author: "Krishna Krishnamurthy"
 date: "March 1, 2017"
-output: html_document
+output: md_document
 ---
 
 ## Reading in data files
