@@ -402,13 +402,14 @@ FAQs
 Re-creating the Economist chart
 -------------------------------
 
+    library("ggrepel")
     # reading in data
-    dat <- read.csv("/home/eeb177-student/Desktop/eeb177/lab-work/exercise-8/Rgraphics/dataSets/EconomistData.csv")
+    dat <- read.csv("/home/eeb177-student/Desktop/eeb177/lab-work/exercise-8/Rgraphics/dataSets/EconomistData_labels.csv")
 
     econ <- ggplot(dat, aes(x = CPI, y = HDI)) + geom_point(aes(color=Region), shape=1) + geom_smooth(data=dat, method="lm", formula = y ~ splines::bs(x,3), se = FALSE, color="red")
-    # scatterplot with CPI on x axis and HDI on y axis, and colors representing regions. hollow circles. 
+    # scatterplot with CPI on x axis and HDI on y axis, and colors representing regions. hollow circles. red smooth line added
 
-    econ1 <- econ + scale_color_manual(name = " ", labels = c("Americas", "Asia-Pacific", "Eastern and Central Europe", "Western Europe", "Middle East and North Africa", "Sub-Saharan Africa"), values = c("#98AFC7", "#95B9C7", "#45FBC7", "#25383C", "#C24641", "#8A4117")) + scale_x_continuous(name="Corruption Perception Index, 2011 (10=least corrupt)", limits = range(1:10), breaks=pretty(dat$CPI, n=10)) + scale_y_continuous(name="Human Development Index (1=best)", limits = range(0.0:1.0),breaks=pretty(dat$HDI, n=5))
+    econ1 <- econ + scale_color_manual(name = " ", labels = c("Americas", "Asia-Pacific", "Eastern and Central Europe", "Western Europe", "Middle East and North Africa", "Sub-Saharan Africa"), values = c("#0099CC", "#95B9C7", "#45FBC7", "#25383C", "#C24641", "#8A4117")) + scale_x_continuous(name="Corruption Perception Index, 2011 (10=least corrupt)", limits = range(1:10), breaks=pretty(dat$CPI, n=10)) + scale_y_continuous(name="Human Development Index (1=best)", limits = range(0.0:1.0),breaks=pretty(dat$HDI, n=5))
     #changing axes descriptions and legend labels
 
     econ2 <- (econ1 + ggtitle("Corruption and human development") + theme(plot.title = element_text(face="bold", size=16)))
@@ -420,7 +421,14 @@ Re-creating the Economist chart
     econ4 <- (econ3 + theme(axis.title.y=element_text(face="italic", size=6)) + theme(axis.title.x=element_text(face="italic", size=6)))
     # making axes labels smaller and italic
 
-    econ4
+    econ5 <- (econ4 + geom_text_repel(aes(label=country_label), size=4))
+    # adding labels (created a new csv for the selected countries)
+
+    econ6 <- (econ5 + theme(panel.background = element_rect(fill="white")))
+    # making panel background white
+
+    econ7 <- (econ6 + theme(axis.line.x = element_line(color="black")))
+    econ7
 
 ![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-15-1.png)
 
