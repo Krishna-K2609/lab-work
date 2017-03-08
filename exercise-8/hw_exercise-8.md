@@ -433,9 +433,13 @@ Re-creating the Economist chart
     econ8 <- econ7 + theme(panel.grid.major.y = element_line(color= "grey"))
     # adding horizontal gridlines
 
-    econ8 # plotting
+    econ7
 
 ![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-15-1.png)
+
+    econ8 # plotting
+
+![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-15-2.png)
 
     #ggplot(dat, aes(x = CPI, y = HDI, color = Region)) + theme(legend.position = "top") + scale_color_manual(labels = c("Americas", "Asia-Pacific", "Eastern and Central Europe", "Western Europe", "Middle East and North Africa", "Sub-Saharan Africa"), values = c("#98AFC7", "#95B9C7", "#45FBC7", "#25383C", "#C24641", "#8A4117") + geom_point(shape=1)) + ggtitle("Corruption and human development") + theme(plot.title = element_text(face="bold", size=16)) + scale_x_continuous(name="Corruption Perception Index, 2011 (10=least corrupt)", limits = range(1:10), breaks=pretty(dat$CPI, n=10)) + scale_y_continuous(name="Human Development Index (1=best)", limits = range(0.0:1.0),breaks=pretty(dat$HDI, n=5)) + scale_color_discrete(name="") + theme(axis.title.y=element_text(face="italic", size=6)) + theme(axis.title.x=element_text(face="italic", size=6)))
     #this stopped working so I decided to break the code into smaller, more digestible chunks.
