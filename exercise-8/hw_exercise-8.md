@@ -428,7 +428,12 @@ Re-creating the Economist chart
     # making panel background white
 
     econ7 <- (econ6 + theme(axis.line.x = element_line(color="black")))
-    econ7
+    # adding axis line
+
+    econ8 <- econ7 + theme(panel.grid.major.y = element_line(color= "grey"))
+    # adding horizontal gridlines
+
+    econ8 # plotting
 
 ![](hw_exercise-8_files/figure-markdown_strict/unnamed-chunk-15-1.png)
 
