@@ -406,6 +406,33 @@ Re-creating the Economist chart
     # reading in data
     dat <- read.csv("/home/eeb177-student/Desktop/eeb177/lab-work/exercise-8/Rgraphics/dataSets/EconomistData_labels.csv")
 
+    # select only labelled countries
+    labelled_countries <- c("Norway", "New Zealand", "Singapore", "Japan", "Germany", "Britain", "Barbados", "France", "Spain","US", "Botswana", "Cape Verde", "South Africa", "Bhutan", "Rwanda", "China", "Brazil", "Greece", "Italy", "Argentina", "Russia", "Venezuela", "Iraq", "Myanmar", "India", "Sudan", "Afghanistan", "Congo")
+
+    dat$Country <- as.character(dat$Country)
+    as.character(dat$Country) %in% labelled_countries
+
+    ##   [1]  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [12] FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
+    ##  [23] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE
+    ##  [34] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [45] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [56]  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE
+    ##  [67] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
+    ##  [78]  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [89] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [100] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+    ## [111] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+    ## [122] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE
+    ## [133] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+    ## [144]  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [155] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [166] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+
+    country_to_print <- character(nrow(dat))
+    printrows <- which(as.character(dat$Country) %in% labelled_countries)
+    country_to_print[printrows] <- dat$Country[printrows]
+
     econ <- ggplot(dat, aes(x = CPI, y = HDI)) + geom_point(aes(color=Region), shape=1) + geom_smooth(data=dat, method="lm", formula = y ~ splines::bs(x,3), se = FALSE, color="red")
     # scatterplot with CPI on x axis and HDI on y axis, and colors representing regions. hollow circles. red smooth line added
 
@@ -421,7 +448,7 @@ Re-creating the Economist chart
     econ4 <- (econ3 + theme(axis.title.y=element_text(face="italic", size=6)) + theme(axis.title.x=element_text(face="italic", size=6)))
     # making axes labels smaller and italic
 
-    econ5 <- (econ4 + geom_text_repel(aes(label=country_label), size=4))
+    econ5 <- (econ4 + geom_text_repel(aes(label=country_to_print), size=4))
     # adding labels (created a new csv for the selected countries)
 
     econ6 <- (econ5 + theme(panel.background = element_rect(fill="white"), legend.key = element_rect(fill="white")))
