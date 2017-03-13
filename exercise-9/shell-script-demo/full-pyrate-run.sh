@@ -1,10 +1,5 @@
 #! /bin/bash
 
-# Script to run full pyrate pipeline on Canidae
-
-# navigate to the working directory
-cd ~/Desktop/eeb-177/lab-work/exercise-9
-
 # download the data
 wget -O canid_occ.csv "https://paleobiodb.org/data1.2/occs/list.csv?base_name=Canidae&show=acconly"
 
