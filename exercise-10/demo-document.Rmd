@@ -18,7 +18,6 @@ We can use markdown syntax to include images:
 
 ![Here is a forest in Papua New Guinea](images/tropical-forest.jpg)
 
-
 However, there are some limits to markdown- for example, we can't resize the figure to make it larger. We can always turn to \LaTeX code to specify options for the image:
 
 \begin{figure}[t]
@@ -33,7 +32,7 @@ However, there are some limits to markdown- for example, we can't resize the fig
 ## Here is another Markdown subheading
 ### Let's add some equations
 
-Here is \LaTeX code to write the likelihood equation that [PyRate uses to estimate rates of speciation and extinction](https://academic.oup.com/sysbio/article/63/3/349/1650079/Bayesian-Estimation-of-Speciation-and-Extinction)\footnote{https://academic.oup.com/sysbio/article/63/3/349/1650079/Bayesian-Estimation-of-Speciation-and-Extinction} (incedently, look! a footnote!). We can write the equation as an in-line equation...
+Here is \LaTeX code to write the likelihood equation that [PyRate uses to estimate rates of speciation and extinction](https://academic.oup.com/sysbio/article/63/3/349/1650079/Bayesian-Estimation-of-Speciation-and-Extinction)\footnote{https://academic.oup.com/sysbio/article/63/3/349/1650079/Bayesian-Estimation-of-Speciation-and-Extinction} (incidently, look! a footnote!). We can write the equation as an in-line equation...
 
 $P(X|s, e, q) = \prod_{i=1}^{n}P_{NHPP}(t_1^i, \dots t_{k_{i}}^i|s_i,e_i,q)$
 
@@ -155,7 +154,7 @@ p
 There's a lot of great places to get help on RMarkdown documents online:  
 
 RStudio guide to RMarkdown: [link](http://rmarkdown.rstudio.com/lesson-1.html)\footnote{http://rmarkdown.rstudio.com/lesson-1.html}     
-Sharelatex guide to latex:  [link](https://www.sharelatex.com/learn/Main_Page)\footnote{https://www.sharelatex.com/learn/Main_Page}
+
 
 
 ## Including python code with syntax highlighting
